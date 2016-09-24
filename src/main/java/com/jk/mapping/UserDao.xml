@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--Mapper元素只有一个属性namespace，
+它有两个作用：一是用于区分不同的mapper（在不同的mapper文件里，子元素的id可以相同，mybatis通过namespace和子元素的id联合区分），
+二是与接口关联（应用程序通过接口访问mybatis时，mybatis通过接口的完整名称查找对应的mapper配置，因此namespace的命名务必小心一定要与接口同名）-->
+<mapper namespace="com.jk.dao.UserDao">
+    <!-- 缓存 -->
+    <!--<cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />-->
+
+    <select id="getUser" parameterType="Users" resultType="Users">
+        SELECT * FROM users WHERE userAccount=#{userAccount} AND password=#{password}
+    </select>
+    <insert id="addUser" parameterType="Users" flushCache="true">
+        INSERT INTO users (usersId,userName,password) VALUES (#{usersId},#{userName},#{password})
+    </insert>
+    <update id="updateUser" parameterType="Users">
+        UPDATE users SET password=#{password} WHERE usersid=#{usersid}
+    </update>
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM users WHERE usersid=#{usersid}
+    </delete>
+    <select id="getAllUser" parameterType="Users" resultType="Users">
+        SELECT * FROM users
+    </select>
+    <select id="getMap" resultType="java.util.HashMap">
+        SELECT * FROM users
+    </select>
+    <select id="getUserPage" resultType="Users">
+        SELECT *
+        FROM users
+        limit #{offset},#{limit}
+    </select>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 通过在你的Spring的配置中引入下列元素来启用Spring对@AspectJ的支持 -->
+	<aop:aspectj-autoproxy />
+
+	<context:property-placeholder location="classpath:druid.properties,classpath:c3p0.properties,classpath:jdbc.properties"/>
+
+	<!-- 配置c3p0连接池 开始 -->
+	<bean id="myC3P0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"></property>
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"></property>
+		<property name="minPoolSize" value="${c3p0.minPoolSize}"></property>
+	</bean>
+	<!-- 配置c3p0连接池 结束 -->
+
+	<!--druid 连接池 开始-->
+	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		  init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${druid.pool.size.init}" />
+		<property name="minIdle" value="${druid.pool.size.min}" />
+		<property name="maxActive" value="${druid.pool.size.max}" />
+
+		<!-- 配置监控统计拦截的filters，wall用于防止sql注入，stat用于统计分析 -->
+		<property name="filters" value="wall,stat" />
+	</bean>
+	<!--druid 连接池 结束-->
+
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="druidDataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:com/jk/mapping/*.xml"></property>
+		<property name="configLocation" value="classpath:mybatis.xml" />
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<!--第一，无需指定引用SqlSessionFactory，因为MapperScannerConfigurer在创建映射器时会通过自动装配的方式来引用。
+      第二，创建的映射器的命名问题。从beans.xml文件中我们可以看出，
+      我们没有办法给MapperScannerConfigurer创建的这些映射器指定id或name属性，
+      它们对我们似乎是不可见的。这个问题的解决之道在于采用了Spring针对自动侦测到的组件的默认命名策略，
+      亦即把类/接口名字的首字母小写，其他不变，作为映射器的名字。
+      例如，映射器接口TeacherMapper被扫描后创建的映射器bean名为teacherMapper。
+      因此，我们可以像以前一样使用这样的代码来得到TeacherMapper实例-
+		第三，可以使用@Component注解给映射器指定名称（本示例的源程序即是采用这种方法）。这里以TeacherMapper为例，若想指定生成的映射器bean名称为“myTeacherMapper”，步骤如下：
+      1、在TeacherMapper接口中增加如下声明：“import org.springframework.stereotype.Component;”；
+      2、在接口声明前添加@Component("myTeacherMapper")注解，即指定生成的映射器名称为myTeacherMapper。-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.jk.dao" />
+		<!--在单数据源的情况下可以不写sqlSessionFactoryBeanName-->
+		<!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />-->
+	</bean>
+
+	<!--事务配置开始-->
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx
+	谨记——》测试是否配置成功：一个非常简单的操作，给数据库某个字段加唯一索引。然后同时写入两条同样的数据
+	没有事务，会报错，但是第一条还是插入进去了，
+	有事务，一条都插不进-->
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="druidDataSource" />
+	</bean>
+	<!--基本事务定义，使用transactionManager作事务管理,默认get*,find*方法的事务为read-only -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 定义AOP配置    第一个*代表所有的返回值类型 第二个*代表所有的类 第三个*代表类所有方法 最后一个..代表所有的参数。 -->
+	<aop:config>
+		<!-- 定义一个切入点 -->
+		<aop:pointcut id="interceptorPointCuts"
+					  expression="execution(* com.jk.service.impl.*Impl.*(..)) or execution(* com.jk.dao.*.*(..))" />
+		<!-- 对切入点和事务的通知，进行适配 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
+	</aop:config>
+	<!--事务配置结束-->
+
+	<!--自定义切面 开始-->
+	<!--<bean id="TimeAspect2" class="com.jk.aspect.TimeAspect2"></bean>
+	<aop:config>
+		<aop:pointcut id="pc1" expression="execution(* com.jk.web.*.*(..))"/>
+		<aop:aspect ref="TimeAspect2">
+			<aop:before method="befor" pointcut-ref="pc1"/>
+			<aop:around method="around" pointcut-ref="pc1"/>
+			<aop:after method="after" pointcut-ref="pc1"/>
+		</aop:aspect>
+	</aop:config>-->
+	<!--自定义切面 结束-->
+
+	<!--性能监控开始-->
+	<bean id="performanceMonitor"
+		  class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
+	</bean>
+
+	<aop:config>
+		<aop:pointcut id="pc2" expression="execution(* com.jk.web.*.*(..))"/>
+		<aop:advisor advice-ref="performanceMonitor" pointcut-ref="pc2"/>
+
+	</aop:config>
+	<!--性能监控结束-->
+
+</beans>
