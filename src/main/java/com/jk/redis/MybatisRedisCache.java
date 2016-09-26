@@ -45,7 +45,7 @@ public class MybatisRedisCache implements Cache {
     public void putObject(Object key, Object value) {
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>>putObject:" + key + "=" + value+"\n");
         redisClient.set(SerializeUtil.serialize(key.toString()), SerializeUtil.serialize(value));
-    }
+    } 
 
     @Override
     public Object getObject(Object key) {
