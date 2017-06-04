@@ -7,16 +7,31 @@
 二是与接口关联（应用程序通过接口访问mybatis时，mybatis通过接口的完整名称查找对应的mapper配置，因此namespace的命名务必小心一定要与接口同名）-->
 <mapper namespace="com.jk.dao.UserDao">
     <!-- 缓存 -->
-    <!--<cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />-->
+    <cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />
 
     <select id="getUser" parameterType="Users" resultType="Users">
-        SELECT * FROM users WHERE userAccount=#{userAccount} AND password=#{password}
+        SELECT * FROM users WHERE 1=1
+        <if test="userAccount != null">
+          AND userAccount=#{userAccount}
+        </if>
+        <if test="password != null">
+          AND password=#{password}
+        </if>
     </select>
     <insert id="addUser" parameterType="Users" flushCache="true">
         INSERT INTO users (usersId,userName,password) VALUES (#{usersId},#{userName},#{password})
     </insert>
-    <update id="updateUser" parameterType="Users">
-        UPDATE users SET password=#{password} WHERE usersid=#{usersid}
+    <update id="updateUser" parameterType="Users" >
+        update users
+        <set >
+            <if test="userName != null" >
+                userName = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userDesc != null" >
+                userDesc = #{userDesc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where usersId = #{usersId,jdbcType=INTEGER}
     </update>
     <delete id="deleteUser" parameterType="int">
         DELETE FROM users WHERE usersid=#{usersid}
@@ -24,12 +39,29 @@
     <select id="getAllUser" parameterType="Users" resultType="Users">
         SELECT * FROM users
     </select>
-    <select id="getMap" resultType="java.util.HashMap">
-        SELECT * FROM users
-    </select>
-    <select id="getUserPage" resultType="Users">
-        SELECT *
-        FROM users
-        limit #{offset},#{limit}
-    </select>
+    <insert id="saveUser" parameterType="Users" >
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="usersId != null" >
+                usersId,
+            </if>
+            <if test="userName != null" >
+                userName,
+            </if>
+            <if test="userDesc != null" >
+                userDesc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="usersId != null" >
+                #{usersId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null" >
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userDesc != null" >
+                #{userDesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 </mapper>

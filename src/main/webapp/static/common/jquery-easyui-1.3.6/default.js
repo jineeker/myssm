@@ -33,7 +33,7 @@ function InitLeftMenu() {
 		menulist +='<ul class="navlist">';
         $.each(n.menus, function(j, o) {
 
-			menulist += '<li><div ><a ref="'+o.menuid+'" href="#" rel="' + o.url + '" ><span class="icon '+o.icon+'" >&nbsp;</span><span class="nav">' + o.menuname + '</span></a></div> ';
+			menulist += '<li><div ><a ref="'+o.menuid+'" href="javascript:void(0);" rel="' + o.url + '" ><span class="icon '+o.icon+'" >&nbsp;</span><span class="nav">' + o.menuname + '</span></a></div> ';
 
 			if(o.child && o.child.length>0)
 			{
@@ -41,7 +41,7 @@ function InitLeftMenu() {
 
 				menulist += '<ul class="third_ul">';
 				$.each(o.child,function(k,p){
-					menulist += '<li><div><a ref="'+p.menuid+'" href="#" rel="' + p.url + '" ><span class="icon '+p.icon+'" >&nbsp;</span><span class="nav">' + p.menuname + '</span></a></div> </li>'
+					menulist += '<li><div><a ref="'+p.menuid+'" href="javascript:void(0);" rel="' + p.url + '" ><span class="icon '+p.icon+'" >&nbsp;</span><span class="nav">' + p.menuname + '</span></a></div> </li>'
 				});
 				menulist += '</ul>';
 			}
@@ -198,9 +198,8 @@ function closeTab(action)
 		allTabtitle.push($(n).panel('options').title);
 	})
 
-
     switch (action) {
-        case "refresh":
+        case "tabupdate":
             var iframe = $(currentTab.panel('options').content);
             var src = iframe.attr('src');
             $('#tabs').tabs('update', {
@@ -212,7 +211,11 @@ function closeTab(action)
             break;
         case "close":
             var currtab_title = currentTab.panel('options').title;
-            $('#tabs').tabs('close', currtab_title);
+			if (currtab_title != onlyOpenTitle){
+				$('#tabs').tabs('close', currtab_title);
+			}else{
+				alert('这个不准关哦!');
+			}
             break;
         case "closeall":
             $.each(allTabtitle, function (i, n) {

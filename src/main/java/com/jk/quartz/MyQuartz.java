@@ -12,7 +12,7 @@ public class MyQuartz {
 
 	Logger log = Logger.getLogger(MyQuartz.class);
 	/**
-	 * 每隔5秒定时清理缓存
+	 * 每隔10秒定时清理缓存
 	 */
 	@Scheduled(cron = "*/10 * * * * ?")
 	public void cacheClear() {

@@ -1,22 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}" />
-<%
-    String path = request.getContextPath();
-    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head id="Head1">
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>后台管理</title>
-    <link href="${ctxPath}/static/common/default.css" rel="stylesheet" type="text/css" />
-
-    <link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/icon.css" />
-    <script type="text/javascript" src="${ctxPath}/static/common/jquery-easyui-1.3.6/jquery.min.js"></script>
-    <script type="text/javascript" src="${ctxPath}/static/common/jquery-easyui-1.3.6/jquery.easyui.min.js"></script>
+    <jsp:include page="${ctx}/static/common/comm.jsp"/>
     <script type="text/javascript" src='${ctxPath}/static/common/jquery-easyui-1.3.6/default.js'> </script>
 
     <script type="text/javascript">
@@ -28,9 +18,9 @@
                 "menuname": "控件使用",
                 "menus": [{
                     "menuid": "12",
-                    "menuname": "疯狂秀才",
+                    "menuname": "古月流苏",
                     "icon": "icon-add",
-                    "url": "http://hxling.cnblogs.com",
+                    "url": "javascript:void(0);",
                     "child": [{
                         "menuid": "140",
                         "menuname": "用户查询",
@@ -142,17 +132,17 @@
         </div>
     </noscript>
 
-    <div id="loading-mask" style="position:absolute;top:0px; left:0px; width:100%; height:100%; background:#D2E0F2; z-index:20000">
+    <div id="loading-mask" style="position:absolute;top:0px; left:0px; width:100%; height:100%; background:#feeebd; z-index:20000">
         <div id="pageloading" style="position:absolute; top:50%; left:50%; margin:-120px 0px 0px -120px; text-align:center;  border:2px solid #8DB2E3; width:200px; height:40px;  font-size:14px;padding:10px; font-weight:bold; background:#fff; color:#15428B;">
-            <img src="images/loading.gif" align="absmiddle" /> 正在加载中,请稍候...</div>
+            <img src="${ctxPath}/static/common/jquery-easyui-1.3.6/images/loading.gif" align="absmiddle" /> 正在加载中,请稍候...</div>
     </div>
 
-    <div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
+    <%--<div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
             background: url(images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
         <span style="float:right; padding-right:20px;" class="head">欢迎 疯狂秀才 <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
         <span style="padding-left:10px; font-size: 16px; "><img src="images/blocks.gif" width="20" height="20" align="absmiddle" /> jQuery.EasyUI- 1.2.6 应用实例</span>
-    </div>
+    </div>--%>
     <div region="west" split="true"  title="导航菜单" style="width:180px;" id="west">
         <div id="nav">
             <!--  导航内容 -->
@@ -162,19 +152,20 @@
     </div>
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
         <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
-            <div title="欢迎使用" style="padding:20px;overflow:hidden; color:red; " >
+            <div title="欢迎使用" style="padding:120px;overflow:hidden; color:red; " >
                 <%--<h1 style="font-size:24px;">* 作者：疯狂秀才 QQ：1055818239</h1>
                 <h1 style="font-size:24px;">* BLOG: <a style="font-size:24px;color:green;" href="http://hxling.cnblogs.com">疯狂秀才的博客</a></h1>
-                <h1 style="font-size:24px;">* 讨论群：112044258、32994605、36534121、56271061</h1>
-                <h1 style="font-size:24px;">* 广告：本人承接各类大中小型管理系统的软件的设计与开发，有需要的朋友联系我啦~~~~</h1>--%>
+                <h1 style="font-size:24px;">* 讨论群：112044258、32994605、36534121、56271061</h1>--%>
+                <%--<h1 style="font-size:130px;font-family: '仿宋';">jinnee&hiker</h1>--%>
             </div>
         </div>
     </div>
-    <div region="south" split="true" style="height: 30px; background: #D2E0F2; ">
-        <div class="footer">By 疯狂秀才</div>
+    <div region="south" split="true" style="height: 30px; background: #feeebd; ">
+        <%--<div class="footer"><marquee>他们在别有用心的生活里 翩翩舞蹈 你在我后半生的城市里 长生不老</marquee></div>--%>
+        <div class="footer">他们在别有用心的生活里 翩翩舞蹈 你在我后半生的城市里 长生不老</div>
     </div>
 
-    <!--修改密码窗口-->
+    <%--<!--修改密码窗口-->
     <div id="w" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
          maximizable="false" icon="icon-save"  style="width: 300px; height: 150px; padding: 5px;
             background: #fafafa;">
@@ -196,7 +187,7 @@
                     确定</a> <a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">取消</a>
             </div>
         </div>
-    </div>
+    </div>--%>
 
     <div id="mm" class="easyui-menu" style="width:150px;">
         <div id="tabupdate">刷新</div>
@@ -210,7 +201,5 @@
         <div class="menu-sep"></div>
         <div id="exit">退出</div>
     </div>
-
-
 </body>
 </html>

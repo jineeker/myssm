@@ -7,14 +7,23 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-
+/**
+ * 实现MyBatis的默认Cache，用redis的缓存功能
+ * @Author hukai
+ * @Email 614811431@qq.com
+ * @Date 2016/10/18 16:52
+ */
 public class MybatisRedisCache implements Cache {
 
     private static Logger logger = Logger.getLogger(MybatisRedisCache.class);
     private Jedis redisClient = createReids();
+
     /**
      * The ReadWriteLock.
      */
@@ -45,7 +54,7 @@ public class MybatisRedisCache implements Cache {
     public void putObject(Object key, Object value) {
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>>putObject:" + key + "=" + value+"\n");
         redisClient.set(SerializeUtil.serialize(key.toString()), SerializeUtil.serialize(value));
-    } 
+    }
 
     @Override
     public Object getObject(Object key) {
@@ -69,8 +78,22 @@ public class MybatisRedisCache implements Cache {
         return readWriteLock;
     }
 
-    protected static Jedis createReids() {
-        JedisPool pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1",6379,3000);
+    protected Jedis createReids() {
+        String host = "localhost";
+        String port = "6379";
+        String timeout = "3000";
+        Properties prop =  new  Properties();
+        InputStream in = MybatisRedisCache.class.getClassLoader().getResourceAsStream( "redis.properties" );
+        try  {
+            prop.load(in);
+            host = prop.getProperty( "redis.ip" ).trim();
+            port = prop.getProperty( "redis.port" ).trim();
+            timeout = prop.getProperty( "redis.pool.maxWait" ).trim();
+        }  catch  (IOException e) {
+            e.printStackTrace();
+        }
+
+        JedisPool pool = new JedisPool(new JedisPoolConfig(),host ,Integer.parseInt(port),Integer.parseInt(timeout));
         return pool.getResource();
     }
 }

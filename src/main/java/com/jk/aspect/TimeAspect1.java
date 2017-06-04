@@ -3,10 +3,7 @@ package com.jk.aspect;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,9 +23,10 @@ public class TimeAspect1 {
     /**
      * 在切入点之前执行
      */
+    @Pointcut
     @Before(POINT)
     public void doBefore() {
-        logger.info("==========================befor================================");
+//        logger.info("==========================befor================================");
     }
 
     /**
@@ -49,7 +47,7 @@ public class TimeAspect1 {
             String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
 
             long endTime = System.currentTimeMillis();
-            logger.info("hehe,用户"+request.getSession().getAttribute("name")+"正在操作:"+signature.getName()+",本次花费："+(endTime-startTime)+"ms");
+            logger.info("您好,用户【"+request.getSession().getAttribute("name")+"】正在操作:"+signature.getName()+",本次花费："+(endTime-startTime)+"ms");
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -61,6 +59,6 @@ public class TimeAspect1 {
      */
     @After(POINT)
     public void doAfter() {
-        logger.info("==========================after================================");
+//        logger.info("==========================after================================");
     }
 }

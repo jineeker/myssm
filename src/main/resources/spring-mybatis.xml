@@ -16,10 +16,13 @@
 	<!-- 通过在你的Spring的配置中引入下列元素来启用Spring对@AspectJ的支持 -->
 	<aop:aspectj-autoproxy />
 
-	<context:property-placeholder location="classpath:druid.properties,classpath:c3p0.properties,classpath:jdbc.properties"/>
+	<context:component-scan base-package="com.jk.redis" />
+
+	<context:property-placeholder location="classpath:druid.properties,classpath:c3p0.properties
+		,classpath:jdbc.properties,classpath:redis.properties"/>
 
 	<!-- 配置c3p0连接池 开始 -->
-	<bean id="myC3P0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<!--<bean id="myC3P0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driverClassName}"></property>
 		<property name="jdbcUrl" value="${jdbc.url}"></property>
 		<property name="user" value="${jdbc.username}"></property>
@@ -28,7 +31,7 @@
 		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"></property>
 		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"></property>
 		<property name="minPoolSize" value="${c3p0.minPoolSize}"></property>
-	</bean>
+	</bean>-->
 	<!-- 配置c3p0连接池 结束 -->
 
 	<!--druid 连接池 开始-->
@@ -46,6 +49,12 @@
 
 		<!-- 配置监控统计拦截的filters，wall用于防止sql注入，stat用于统计分析 -->
 		<property name="filters" value="wall,stat" />
+	</bean>
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<!--tatFilter属性slowSqlMillis用来配置SQL慢的标准，执行时间超过slowSqlMillis的就是慢。
+		slowSqlMillis的缺省值为3000，也就是3秒。-->
+		<property name="slowSqlMillis" value="10000" />
+		<property name="logSlowSql" value="true" />
 	</bean>
 	<!--druid 连接池 结束-->
 
@@ -84,10 +93,13 @@
 		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="druidDataSource" />
 	</bean>
-	<!--基本事务定义，使用transactionManager作事务管理,默认get*,find*方法的事务为read-only -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<!--基本事务定义，使用transactionManager作事务管理
+	propagation定义事务的传播特性
+	在四种隔离级别中,Serializable的级别最高,Read Uncommited级别最低. -->
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="find*" read-only="true" />
+			<tx:method name="find*" read-only="true" isolation="READ_COMMITTED" />
 			<tx:method name="update*" propagation="REQUIRED" />
 			<tx:method name="delete*" propagation="REQUIRED" />
 			<tx:method name="save*" propagation="REQUIRED" />
@@ -128,4 +140,15 @@
 	</aop:config>
 	<!--性能监控结束-->
 
+	<!-- redis连接配置 开始-->
+	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.ip}" />
+		<property name="port" value="${redis.port}" />
+		<property name="timeout" value="${redis.pool.maxWait}" />
+	</bean>
+	<!-- redisTemplate配置，redisTemplate是对Jedis的对redis操作的扩展，有更多的操作，封装使操作更便捷 -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+	</bean>
+	<!-- redis连接配置 结束-->
 </beans>

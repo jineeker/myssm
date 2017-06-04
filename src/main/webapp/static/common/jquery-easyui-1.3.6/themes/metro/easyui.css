@@ -1079,9 +1079,14 @@
 .datagrid-cell-group {
   text-align: center;
 }
-.datagrid-header-rownumber,
+.datagrid-header-rownumber{
+  width: 35px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
 .datagrid-cell-rownumber {
-  width: 25px;
+  width: 35px;
   text-align: center;
   margin: 0;
   padding: 0;
