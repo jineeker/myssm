@@ -18,21 +18,8 @@
 
 	<context:component-scan base-package="com.jk.redis" />
 
-	<context:property-placeholder location="classpath:druid.properties,classpath:c3p0.properties
+	<context:property-placeholder location="classpath:druid.properties
 		,classpath:jdbc.properties,classpath:redis.properties"/>
-
-	<!-- 配置c3p0连接池 开始 -->
-	<!--<bean id="myC3P0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<property name="driverClass" value="${jdbc.driverClassName}"></property>
-		<property name="jdbcUrl" value="${jdbc.url}"></property>
-		<property name="user" value="${jdbc.username}"></property>
-		<property name="password" value="${jdbc.password}"></property>
-
-		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"></property>
-		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"></property>
-		<property name="minPoolSize" value="${c3p0.minPoolSize}"></property>
-	</bean>-->
-	<!-- 配置c3p0连接池 结束 -->
 
 	<!--druid 连接池 开始-->
 	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource"
@@ -62,7 +49,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="druidDataSource" />
 		<!-- 自动扫描mapping.xml文件 -->
-		<property name="mapperLocations" value="classpath:com/jk/mapping/*.xml"></property>
+		<property name="mapperLocations" value="classpath:/mapping/*.xml"></property>
 		<property name="configLocation" value="classpath:mybatis.xml" />
 	</bean>
 

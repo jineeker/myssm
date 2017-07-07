@@ -3,7 +3,7 @@ package com.jk.web;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.StringUtil;
 import com.jk.model.User;
-import com.jk.service.UserService;
+import com.jk.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,12 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping(value = "${adminPath}/user")
 public class AdminController {
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
-	Logger log = Logger.getLogger(AdminController.class);
+	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
 
 	/**
 	 * 进入后台首页
@@ -30,7 +31,7 @@ public class AdminController {
      */
 	@RequestMapping("index.do")
 	public String index(){
-		log.info("welcome to admin page");
+		LOGGER.info("welcome to admin page");
 		return "/admin/index";
 	}
 

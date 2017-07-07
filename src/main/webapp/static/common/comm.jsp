@@ -3,7 +3,8 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <link href="${ctxPath}/static/common/jquery-easyui-1.3.6/css/default.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/ui-sunny/easyui.css" />
+<!--换模板修改/themes/black/为其他即可-->
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/black/easyui.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/icon.css" />
 
 <script type="text/javascript" src="${ctxPath}/static/common/jquery-easyui-1.3.6/jquery.min.js"></script>

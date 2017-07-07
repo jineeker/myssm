@@ -4,17 +4,10 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-  <!--tomcat容器对于web.xml的加载过程是context-param >> listener  >> fileter  >> servlet-->
-
   <!--spring 配置参数 start-->
-  <!-- 指定Spring Bean的配置文件所在目录。默认配置在WEB-INF目录下
-       如果在web.xml中不写任何参数配置信息，默认的路径是/WEB-INF/applicationContext.xml，
-       在WEB-INF目录下创建的xml文件的名称必须是applicationContext.xml；
-       如果是要自定义文件名可以在web.xml里加入contextConfigLocation这个context参数
-       要配置在下面Web容器启动前-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring-servlet.xml,classpath:mybatis.xml,classpath:spring-mybatis.xml,classpath:spring-quartz.xml</param-value>
+    <param-value>classpath:spring-mvc.xml,classpath:mybatis.xml,classpath:spring-mybatis.xml</param-value>
   </context-param>
   <!--ContextLoaderListener监听器的作用就是启动Web容器时，自动装配ApplicationContext的配置信息-->
   <listener>
@@ -31,7 +24,7 @@
       默认为WEB-INF目录下，名称为[<servlet-name>]-servlet.xml，如spring-servlet.xml-->
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring-servlet.xml</param-value>
+      <param-value>classpath:spring-mvc.xml</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -42,26 +35,7 @@
   </servlet-mapping>
   <!-- Spring MVC 配置 核心控制器 end-->
 
-  <!--
-      if(configurationOptionStr == null) {
-          url = Loader.getResource("log4j.xml");
-          if(url == null) {
-              url = Loader.getResource("log4j.properties");
-          }
-      }
-      这是org.apache.log4j.LogManager源码类中的逻辑，有可能是启动时未查找到，就会自动去加载名称为log4j.xml，log4j.properties的文件
-      log4j.xml优先，所以我猜测，即使不配置Spring的log4j监听器，也可以启用log4j的功能
-  -->
-  <!--<context-param>
-      <param-name>log4jConfigLocation</param-name>
-      <param-value>classpath:log4jabc.properties</param-value>
-  </context-param>-->
-  <!-- Spring的log4j监听器 -->
-  <!--<listener>
-      <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-  </listener>-->
-
-  <!-- druid -->
+  <!-- druid start-->
   <servlet>
     <servlet-name>DruidStatView</servlet-name>
     <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
@@ -83,4 +57,10 @@
     <filter-name>DruidWebStatFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <!-- druid end-->
+
+  <!--设置欢迎页-->
+  <welcome-file-list>
+    <welcome-file>/welcome.jsp</welcome-file>
+  </welcome-file-list>
 </web-app>

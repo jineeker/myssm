@@ -2,7 +2,7 @@ package com.jk.web;
 
 import com.jk.model.User;
 import com.jk.redis.RedisCache;
-import com.jk.service.UserService;
+import com.jk.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +20,11 @@ import java.util.*;
  * @Date 2016/9/9 16:26
  */
 @Controller
+@RequestMapping(value = "${path}/wecome")
 public class IndexController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private RedisCache redisCache;

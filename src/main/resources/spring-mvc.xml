@@ -14,7 +14,7 @@
 
 	<!-- 开启注解 -->
 	<mvc:annotation-driven />
-
+	<context:property-placeholder  ignore-unresolvable="true" location="classpath:myssm.properties"/>
 	<!-- 返回json 方法一 需要导入 fastjson.jar包 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="false">

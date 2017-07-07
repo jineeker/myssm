@@ -3,7 +3,7 @@ package com.jk.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jk.dao.UserDao;
 import com.jk.model.User;
-import com.jk.service.UserService;
+import com.jk.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * Created by hukai on 2016/9/9.
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class IUserServiceImpl implements IUserService {
 
     @Autowired
     protected UserDao userDao;
