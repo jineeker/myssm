@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.dao.LeaveDao">
+    <!-- 缓存 -->
+   <!-- <cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />-->
+
+    <insert id="addLeave" parameterType="Leave" flushCache="true">
+        INSERT INTO user_leave (leaveId,reason,startTime,endTime,leaveDays,createDate)
+        VALUES (#{leaveId},#{reason},#{startTime},#{endTime},#{leaveDays},#{createDate});
+    </insert>
+
+    <select id="getLeave" parameterType="Leave" resultType="Leave">
+        SELECT * FROM user_leave WHERE 1=1
+        <if test="processInstanceId != null">
+          AND processInstanceId=#{processInstanceId}
+        </if>
+    </select>
+
+    <select id="getAllLeave" parameterType="Leave" resultType="Leave">
+        SELECT * FROM user_leave
+    </select>
+
+    <update id="updateLeave" parameterType="Leave" >
+        update user_leave
+        <set >
+            <if test="processInstanceId != null" >
+                processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where leaveId = #{leaveId,jdbcType=INTEGER}
+    </update>
+</mapper>

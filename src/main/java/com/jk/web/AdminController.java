@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "${adminPath}/user")
+@RequestMapping(value = "${adminPath}/index")
 public class AdminController {
 
 	@Autowired
@@ -29,7 +29,7 @@ public class AdminController {
 	 * 进入后台首页
 	 * @return
      */
-	@RequestMapping("index.do")
+	@RequestMapping(value = {"index", ""})
 	public String index(){
 		LOGGER.info("welcome to admin page");
 		return "/admin/index";

@@ -3,18 +3,19 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:context="http://www.springframework.org/schema/context"
 	   xmlns:mvc="http://www.springframework.org/schema/mvc"
-	   xmlns:aop="http://www.springframework.org/schema/aop"
-	   xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	http://www.springframework.org/schema/aop
-  	http://www.springframework.org/schema/aop/spring-aop.xsd">
+  	http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<!-- 开启注解 -->
 	<mvc:annotation-driven />
+
 	<context:property-placeholder  ignore-unresolvable="true" location="classpath:myssm.properties"/>
+
 	<!-- 返回json 方法一 需要导入 fastjson.jar包 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="false">
@@ -30,6 +31,9 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+
+	<!-- 加载应用属性实例，可通过  @Value("#{APP_PROP['jdbc.driver']}") String jdbcDriver 方式引用 -->
+	<util:properties id="APP_PROP" location="classpath:myssm.properties" local-override="true"/>
 
 	<!--<context:component-scan/>标签是告诉Spring 来扫描指定包下的类，
 	并注册被@Component，@Controller，@Service，@Repository等注解标记的组件。-->
@@ -57,4 +61,8 @@
 	<!--<mvc:resources location="/static/" mapping="/image/**" />-->
 	<mvc:resources mapping="/static/**" location="/static/"/>
 
+	<!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="${web.maxUploadSize}" />
+	</bean>
 </beans>

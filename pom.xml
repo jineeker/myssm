@@ -15,9 +15,50 @@
     <springversion>4.2.6.RELEASE</springversion>
     <mybatis.version>3.4.0</mybatis.version>
     <junitversion>3.8.1</junitversion>
+    <activiti.version>5.21.0</activiti.version>
   </properties>
 
   <dependencies>
+    <!-- Activiti -->
+    <dependency>
+      <groupId>org.activiti</groupId>
+      <artifactId>activiti-engine</artifactId>
+      <version>${activiti.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.activiti</groupId>
+      <artifactId>activiti-spring</artifactId>
+      <version>${activiti.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.activiti</groupId>
+      <artifactId>activiti-explorer</artifactId>
+      <version>${activiti.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>vaadin</artifactId>
+          <groupId>com.vaadin</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>dcharts-widget</artifactId>
+          <groupId>org.vaadin.addons</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>activiti-simple-workflow</artifactId>
+          <groupId>org.activiti</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.activiti</groupId>
+      <artifactId>activiti-modeler</artifactId>
+      <version>${activiti.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.activiti</groupId>
+      <artifactId>activiti-diagram-rest</artifactId>
+      <version>${activiti.version}</version>
+    </dependency>
     <!--mybatis 分页插件-->
     <dependency>
       <groupId>com.github.pagehelper</groupId>

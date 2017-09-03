@@ -17,7 +17,7 @@
                 "icon": "icon-sys",
                 "menuname": "控件使用",
                 "menus": [{
-                    "menuid": "12",
+                    "menuid": "11",
                     "menuname": "古月流苏",
                     "icon": "icon-add",
                     "url": "javascript:void(0);",
@@ -26,6 +26,42 @@
                         "menuname": "用户查询",
                         "icon": "icon-role",
                         "url": "userView.do"
+                    }]
+                },
+                {
+                    "menuid": "12",
+                    "menuname": "流程引擎",
+                    "icon": "icon-add",
+                    "url": "javascript:void(0);",
+                    "child": [{
+                        "menuid": "121",
+                        "menuname": "流程管理",
+                        "icon": "icon-role",
+                        "url": "/k/act/process/listView"
+                    },
+                    {
+                        "menuid": "121",
+                        "menuname": "运行中的流程",
+                        "icon": "icon-role",
+                        "url": "/k/act/process/runninglistView"
+                    },
+                    {
+                        "menuid": "121",
+                        "menuname": "部署流程",
+                        "icon": "icon-role",
+                        "url": "/k/act/process/deployView"
+                    },
+                    {
+                        "menuid": "121",
+                        "menuname": "请假信息",
+                        "icon": "icon-role",
+                        "url": "/k/leave/listView"
+                    },
+                    {
+                        "menuid": "121",
+                        "menuname": "任务管理",
+                        "icon": "icon-role",
+                        "url": "/k/act/task/listView"
                     }]
                 }]
             },
@@ -153,6 +189,7 @@
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
         <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
             <div title="欢迎使用" style="padding:120px;overflow:hidden; color:red; " >
+                <h1 style="font-size:24px;">WELCOME TO ADMIN PAGE</h1>
                 <%--<h1 style="font-size:24px;">* 作者：疯狂秀才 QQ：1055818239</h1>
                 <h1 style="font-size:24px;">* BLOG: <a style="font-size:24px;color:green;" href="http://hxling.cnblogs.com">疯狂秀才的博客</a></h1>
                 <h1 style="font-size:24px;">* 讨论群：112044258、32994605、36534121、56271061</h1>--%>

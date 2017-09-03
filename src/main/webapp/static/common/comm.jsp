@@ -4,7 +4,7 @@
 
 <link href="${ctxPath}/static/common/jquery-easyui-1.3.6/css/default.css" rel="stylesheet" type="text/css" />
 <!--换模板修改/themes/black/为其他即可-->
-<link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/black/easyui.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/gray/easyui.css" />
 <link rel="stylesheet" type="text/css" href="${ctxPath}/static/common/jquery-easyui-1.3.6/themes/icon.css" />
 
 <script type="text/javascript" src="${ctxPath}/static/common/jquery-easyui-1.3.6/jquery.min.js"></script>

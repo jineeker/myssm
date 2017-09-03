@@ -2,12 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--报dao层缓存错误时，先检查有没有启动redis-->
+
 <!--Mapper元素只有一个属性namespace，
 它有两个作用：一是用于区分不同的mapper（在不同的mapper文件里，子元素的id可以相同，mybatis通过namespace和子元素的id联合区分），
 二是与接口关联（应用程序通过接口访问mybatis时，mybatis通过接口的完整名称查找对应的mapper配置，因此namespace的命名务必小心一定要与接口同名）-->
 <mapper namespace="com.jk.dao.UserDao">
     <!-- 缓存 -->
-    <cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />
+    <!--<cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />-->
 
     <select id="getUser" parameterType="Users" resultType="Users">
         SELECT * FROM users WHERE 1=1
