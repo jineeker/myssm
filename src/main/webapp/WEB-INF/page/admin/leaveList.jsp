@@ -12,8 +12,6 @@
 	<a href="#" onclick="toActive();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">添加</a>
 	&nbsp;
 	<a href="#" onclick="toSuspend();" class="easyui-linkbutton" data-options="iconCls:'icon-no',plain:true">审批</a>
-	&nbsp;
-	<a href="#" onclick="toDelete();" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
 </div>
 
 
@@ -25,7 +23,7 @@
 	var selectRow;
 	$(function(){
 		$("#leaveTable").datagrid({
-			url:'list',
+			url:'leaveList',
 			method:'post',
 			loadMsg:'正在努力加载！',
 			toolbar:'#processTb',
@@ -52,9 +50,13 @@
 						return unixTimestamp.toLocaleString();
 					}
 				},
-				{field:'taskName',title:'任务节点名'},
+				{field:'taskName',title:'当前节点名'},
 				{field:'taskUser',title:'当前任务人'},
-				{field:'taskDesc',title:'任务审批备注'}
+				{field:'taskDesc',title:'最后批注'},
+				{field:'op',title:'操作',formatter:function(value,row,index){
+						return "<a onclick='javascript:void(0);' style='color: blue;'>查看详情</a>";
+					}
+				}
 
 			]],
 			onLoadSuccess : function () {//配置首列编号宽度的自适应

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,11 +38,44 @@ public class ActProcessController extends BaseController {
 	private ActProcessService actProcessService;
 
 	/**
-	 * 流程定义列表
+	 * 部署流程-view
 	 */
 //	@RequiresPermissions("act:process:edit")
-	@RequestMapping(value = {"listView", ""})
-	public String processListView(HttpServletRequest request, HttpServletResponse response, Model model) {
+	@RequestMapping(value = "deployView")
+	public String deploy() {
+		return "/admin/actProcessDeploy";
+	}
+
+	/**
+	 * 部署流程-action
+	 * @param file
+	 * @return
+	 */
+//	@RequiresPermissions("act:process:edit")
+	@RequestMapping(value = "deploy")
+	public @ResponseBody
+	Map<String,Object> deploy(@Value("#{APP_PROP['activiti.export.diagram.path']}") String exportDir,
+						 String category, MultipartFile file) {
+
+		String fileName = file.getOriginalFilename();
+
+		Map<String,Object> returnMap = new HashMap<String, Object>();
+		if (StringUtils.isBlank(fileName)){
+			returnMap.put("message", "请选择要部署的流程文件");
+		}else{
+			String message = actProcessService.deploy(exportDir, category, file);
+			returnMap.put("message", message);
+		}
+
+		return returnMap;
+	}
+
+	/**
+	 * 流程管理列表-view
+	 */
+//	@RequiresPermissions("act:process:edit")
+	@RequestMapping(value = {"processListView"})
+	public String processListView() {
 		return "/admin/actProcessList";
 	}
 
@@ -49,26 +83,21 @@ public class ActProcessController extends BaseController {
 	 * 流程定义列表
 	 */
 //	@RequiresPermissions("act:process:edit")
-	@RequestMapping(value = {"list"})
+	@RequestMapping(value = {"processList"})
 	public  @ResponseBody
-	Map<String,Object> processList(String category, HttpServletRequest request, HttpServletResponse response, Model model) {
-		String pageNum = request.getParameter("page");
-		String pageSize = request.getParameter("rows");
-		if(StringUtil.isEmpty(pageNum)){
-			pageNum = "1";
-			pageSize = "10";
-		}
-		Page<Object[]> page = new Page<Object[]>();
-		page.setPageNum(Integer.parseInt(pageNum));
-		page.setPageSize(Integer.parseInt(pageSize));
+	Map<String,Object> processList(@RequestParam(value = "page", required = false) Integer page,
+								   @RequestParam(value = "rows", required = false) Integer rows,
+								   String category) {
 
-		Map<String,Object> pageListMap = actProcessService.processListMap(page, category);
+		Page pageEntity = new Page(page,rows);
+
+		System.out.println(pageEntity.getPageNum()+"-----"+pageEntity.getStartRow()+"----"+pageEntity.getPageSize());
+		Map<String,Object> pageListMap = actProcessService.processListMap(pageEntity, category);
 
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("rows", pageListMap.get("rows"));
 		map.put("total",pageListMap.get("total"));
 
-		System.out.println(map.toString());
 		return map;
 	}
 
@@ -121,36 +150,6 @@ public class ActProcessController extends BaseController {
 		}
 	}
 
-	/**
-	 * 部署流程
-	 */
-//	@RequiresPermissions("act:process:edit")
-	@RequestMapping(value = "deployView")
-	public String deploy(Model model) {
-		return "/admin/actProcessDeploy";
-	}
-
-	/**
-	 * 部署流程 - 保存
-	 * @param file
-	 * @return
-	 */
-//	@RequiresPermissions("act:process:edit")
-	@RequestMapping(value = "deploy")
-	public String deploy(@Value("#{APP_PROP['activiti.export.diagram.path']}") String exportDir,
-						 String category, MultipartFile file, RedirectAttributes redirectAttributes) {
-
-		String fileName = file.getOriginalFilename();
-
-		if (StringUtils.isBlank(fileName)){
-			redirectAttributes.addFlashAttribute("message", "请选择要部署的流程文件");
-		}else{
-			String message = actProcessService.deploy(exportDir, category, file);
-			redirectAttributes.addFlashAttribute("message", message);
-		}
-
-		return "redirect:" + adminPath + "/act/process";
-	}
 //
 //	/**
 //	 * 设置流程分类

@@ -4,14 +4,13 @@
 package com.jk.web;
 
 import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.StringUtil;
 import com.jk.base.BaseController;
 import com.jk.model.Leave;
 import com.jk.service.ILeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,29 +30,22 @@ public class LeaveController extends BaseController {
 	private ILeaveService leaveService;
 
 	/**
-	 * 请假信息页面
+	 * 请假信息列表-view
 	 */
-	@RequestMapping(value = {"listView", ""})
-	public String leaveListView(HttpServletRequest request, HttpServletResponse response, Model model) {
+	@RequestMapping(value = {"leaveListView", ""})
+	public String leaveListView() {
 		return "/admin/leaveList";
 	}
 
 	/**
-	 * 请假信息列表
+	 * 请假信息列表-action
 	 */
-	@RequestMapping(value = {"list"})
-	public  @ResponseBody Map<String,Object> leaveList(String category,
-			HttpServletRequest request, HttpServletResponse response, Model model) {
-
-		String pageNum = request.getParameter("page");
-		String pageSize = request.getParameter("rows");
-		if(StringUtil.isEmpty(pageNum)){
-			pageNum = "1";
-			pageSize = "10";
-		}
+	@RequestMapping(value = {"leaveList"})
+	public  @ResponseBody Map<String,Object> leaveList(@RequestParam(value = "page", required = false) Integer page,
+													   @RequestParam(value = "rows", required = false) Integer rows) {
 
 		Map<String,Object> map = new HashMap<String, Object>();
-		List<Leave> list = leaveService.getAllLeave4Page(null,Integer.parseInt(pageNum),Integer.parseInt(pageSize));
+		List<Leave> list = leaveService.getAllLeave4Page(null,page,rows);
 
 		//用PageInfo对结果进行包装，来获取分页需要的数据
 		PageInfo pageInfo = new PageInfo(list);

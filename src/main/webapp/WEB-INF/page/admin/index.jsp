@@ -35,27 +35,27 @@
                     "url": "javascript:void(0);",
                     "child": [{
                         "menuid": "121",
-                        "menuname": "流程管理",
-                        "icon": "icon-role",
-                        "url": "/k/act/process/listView"
-                    },
-                    {
-                        "menuid": "121",
-                        "menuname": "运行中的流程",
-                        "icon": "icon-role",
-                        "url": "/k/act/process/runninglistView"
-                    },
-                    {
-                        "menuid": "121",
                         "menuname": "部署流程",
                         "icon": "icon-role",
                         "url": "/k/act/process/deployView"
                     },
                     {
                         "menuid": "121",
+                        "menuname": "流程管理",
+                        "icon": "icon-role",
+                        "url": "/k/act/process/processListView"
+                    },
+//                    {
+//                        "menuid": "121",
+//                        "menuname": "运行中的流程",
+//                        "icon": "icon-role",
+//                        "url": "/k/act/process/runninglistView"
+//                    },
+                    {
+                        "menuid": "121",
                         "menuname": "请假信息",
                         "icon": "icon-role",
-                        "url": "/k/leave/listView"
+                        "url": "/k/leave/leaveListView"
                     },
                     {
                         "menuid": "121",

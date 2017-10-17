@@ -25,7 +25,7 @@
 	var selectRow;
 	$(function(){
 		$("#processTable").datagrid({
-			url:'list',
+			url:'processList',
 //			width:100,
 			method:'post',
 			loadMsg:'正在努力加载！',

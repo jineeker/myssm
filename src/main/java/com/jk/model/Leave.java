@@ -26,7 +26,7 @@ public class Leave extends BaseVO implements Serializable{
     private String taskName;//任务节点名
     private String taskUser;//当前任务人
     private String taskDesc;//任务审批备注
-    private String taskId;//任务审批备注
+    private String taskId;//任务Id
 
     public String getUserId() {
         return userId;

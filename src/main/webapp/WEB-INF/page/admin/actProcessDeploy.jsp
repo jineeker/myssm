@@ -7,39 +7,43 @@
 	<title>部署流程</title>
 	<jsp:include page="${ctx}/static/common/comm.jsp"/>
 <body>
-	<!--工具栏-->
-	<div id="processTb">
-		<a href="#" onclick="toAddUser();" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
-		&nbsp;
-		<a href="#" onclick="toEditUser();" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
-		&nbsp;
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
+
+	<div class="easyui-panel" title="部署流程" style="width:500px">
+	<div style="padding:10px 60px 20px 60px">
+	<form id="inputForm" action="/k/act/process/deploy" method="post" enctype="multipart/form-data" class="form-horizontal">
+		<table cellpadding="8">
+			<tr>
+				<td>流程文件:</td>
+				<td><input type="file" id="file" name="file" class="required"/></td>
+			</tr>
+			<tr>
+				<td>提示:</td>
+				<td><span class="help-inline" style="font-size: 10px;">支持文件格式：zip、bar、bpmn、bpmn20.xml</span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<div class="form-actions">
+						<%--<input id="btnSubmit" class="btn btn-primary" type="submit" value="提 交"/>
+						<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>--%>
+						<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+						<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">清空</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</form>
+	</div>
 	</div>
 
-	<form id="inputForm" action="/k/act/process/deploy" method="post" enctype="multipart/form-data" class="form-horizontal">
-		<%--<div class="control-group">
-			<label class="control-label">流程分类：</label>
-			<div class="controls">
-				<select id="category" name="category" class="required input-medium">
-					<c:forEach items="${fns:getDictList('act_category')}" var="dict">
-						<option value="${dict.value}">${dict.label}</option>
-					</c:forEach>
-				</select>
-			</div>
-		</div>--%>
-		<div class="control-group">
-			<label class="control-label">流程文件：</label>
-			<div class="controls">
-				<input type="file" id="file" name="file" class="required"/>
-				<span class="help-inline">支持文件格式：zip、bar、bpmn、bpmn20.xml</span>
-			</div>
-		</div>
-		<div class="form-actions">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="提 交"/>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-		</div>
-	</form>
-
-<div id="win"></div>
+	<script>
+        function submitForm(){
+            $("#inputForm").submit();
+        }
+        function clearForm(){
+            $('#inputForm').form('clear');
+        }
+	</script>
 </body>
 </html>

@@ -5,7 +5,9 @@ import com.jk.dao.LeaveDao;
 import com.jk.model.Leave;
 import com.jk.service.ILeaveService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class LeaveServiceImpl implements ILeaveService {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Override
     public boolean addLeave(Leave leave) {
@@ -62,6 +67,18 @@ public class LeaveServiceImpl implements ILeaveService {
     public List<Leave> getAllLeave4Page(Leave leave,Integer page,Integer rows) {
         PageHelper.startPage(page, rows);
         List<Leave> list = leaveDao.getAllLeave(leave);
+        for(Leave entity:list){
+            List<Task> tasks = taskService.createTaskQuery().processInstanceId(entity.getProcessInstanceId()).list();
+            if(tasks.size()>0){
+                Task task = tasks.get(0);
+                entity.setTaskUser(task.getAssignee());
+                entity.setTaskName(task.getName());
+
+                String comment = (String) taskService.getVariable(task.getId(), "comment");
+                entity.setTaskDesc(comment);
+            }
+            System.out.println(tasks.size());
+        }
         return list;
     }
 
