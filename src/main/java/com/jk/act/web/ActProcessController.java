@@ -5,7 +5,7 @@ package com.jk.act.web;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.StringUtil;
-import com.jk.act.service.ActProcessService;
+import com.jk.act.service.IActProcessService;
 import com.jk.base.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class ActProcessController extends BaseController {
 
 	@Autowired
-	private ActProcessService actProcessService;
+	private IActProcessService actProcessService;
 
 	/**
 	 * 部署流程-view

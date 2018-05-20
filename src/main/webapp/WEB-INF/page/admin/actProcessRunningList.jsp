@@ -34,12 +34,6 @@
 			pagination:true,
 			fitColumns:true,
 			columns:[[
-				/*<th>执行ID</th>
-				<th>流程实例ID</th>
-				<th>流程定义ID</th>
-				<th>当前环节</th>
-				<th>是否挂起</th>
-				<th>操作</th>*/
 				{field:'id',title:'执行ID'},
 				{field:'processInstanceId',title:'流程实例ID'},
 				{field:'processDefinitionId',title:'流程定义ID'},

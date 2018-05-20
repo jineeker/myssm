@@ -3,7 +3,7 @@ package com.jk.act.web;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.StringUtil;
 import com.jk.act.entity.BaseVO;
-import com.jk.act.service.ActTaskService;
+import com.jk.act.service.IActTaskService;
 import com.jk.base.BaseController;
 import com.jk.model.User;
 import org.activiti.engine.TaskService;
@@ -34,7 +34,7 @@ public class ActTaskController extends BaseController {
     private TaskService taskService;
 
     @Autowired
-    private ActTaskService actTaskService;
+    private IActTaskService actTaskService;
 
     /**
      * 跳转至任务管理页面

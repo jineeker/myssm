@@ -1,17 +1,9 @@
 package com.jk.dao;
 
-import com.jk.model.User;
+import com.jk.model.AdminUserAndRoleEntity;
+import com.jk.model.AdminUsersEntity;
 
-import java.util.List;
-
-/**
- * Created by hukai on 2016/9/9.
- */
-public interface UserDao {
-    User getUser(User user);
-    void addUser(User user);
-    int updateUser(User user);
-    void deleteUser(int UserId);
-    List<User> getAllUser(User user);
-    int saveUser(User user);
+public interface UserDao extends BaseDao<AdminUsersEntity>{
+    int deleteUserAndRole(AdminUserAndRoleEntity adminUserAndRoleEntity);
+    int updateUserAndRole(AdminUserAndRoleEntity adminUserAndRoleEntity);
 }

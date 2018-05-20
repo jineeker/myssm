@@ -4,10 +4,23 @@ window.onload = function(){
 
 var onlyOpenTitle="欢迎使用";//不允许关闭的标签的标题
 
+var _menus
 $(function(){
-	InitLeftMenu();
-	tabClose();
-	tabCloseEven();
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: "/k/index/loadingMenu.do",
+        success: function(data) {
+
+            _menus = eval('(' + data + ')'); //不可缺少，js中json转换 ;
+
+			console.log(_menus)
+            InitLeftMenu();
+            tabClose();
+            tabCloseEven();
+        }
+    });
+
 
 /* 选择TAB时刷新内容
 	$('#tabs').tabs({
@@ -30,26 +43,29 @@ function InitLeftMenu() {
 	var selectedPanelname = '';
     $.each(_menus.menus, function(i, n) {
 		var menulist ='';
-		menulist +='<ul class="navlist">';
-        $.each(n.menus, function(j, o) {
+		//若一级子菜单有下级菜单才执行以下代码，若没有该判断，当一级菜单没有下级菜单时，菜单初始化会报错
+		if(n.menus!=null){
 
-			menulist += '<li><div ><a ref="'+o.menuid+'" href="javascript:void(0);" rel="' + o.url + '" ><span class="icon '+o.icon+'" >&nbsp;</span><span class="nav">' + o.menuname + '</span></a></div> ';
+			menulist +='<ul class="navlist">';
+			$.each(n.menus, function(j, o) {
 
-			if(o.child && o.child.length>0)
-			{
-				//li.find('div').addClass('icon-arrow');
+				menulist += '<li><div ><a ref="'+o.menuid+'" href="javascript:void(0);" rel="' + o.url + '" ><span class="icon '+o.icon+'" >&nbsp;</span><span class="nav">' + o.menuname + '</span></a></div> ';
 
-				menulist += '<ul class="third_ul">';
-				$.each(o.child,function(k,p){
-					menulist += '<li><div><a ref="'+p.menuid+'" href="javascript:void(0);" rel="' + p.url + '" ><span class="icon '+p.icon+'" >&nbsp;</span><span class="nav">' + p.menuname + '</span></a></div> </li>'
-				});
-				menulist += '</ul>';
-			}
+				if(o.child && o.child.length>0)
+				{
+					//li.find('div').addClass('icon-arrow');
 
-			menulist+='</li>';
-        })
-		menulist += '</ul>';
+					menulist += '<ul class="third_ul">';
+					$.each(o.child,function(k,p){
+						menulist += '<li><div><a ref="'+p.menuid+'" href="javascript:void(0);" rel="' + p.url + '" ><span class="icon '+p.icon+'" >&nbsp;</span><span class="nav">' + p.menuname + '</span></a></div> </li>'
+					});
+					menulist += '</ul>';
+				}
 
+				menulist+='</li>';
+			})
+			menulist += '</ul>';
+        }
 		$('#nav').accordion('add', {
             title: n.menuname,
             content: menulist,
@@ -110,11 +126,14 @@ function InitLeftMenu() {
 function getIcon(menuid){
 	var icon = 'icon ';
 	$.each(_menus.menus, function(i, n) {
-		 $.each(n.menus, function(j, o) {
-		 	if(o.menuid==menuid){
-				icon += o.icon;
-			}
-		 })
+        //若一级子菜单有下级菜单才执行以下代码，若没有该判断，当一级菜单没有下级菜单时，菜单初始化会报错
+        if(n.menus!=null) {
+            $.each(n.menus, function (j, o) {
+                if (o.menuid == menuid) {
+                    icon += o.icon;
+                }
+            })
+        }
 	})
 
 	return icon;
@@ -123,11 +142,14 @@ function getIcon(menuid){
 function find(menuid){
 	var obj=null;
 	$.each(_menus.menus, function(i, n) {
-		 $.each(n.menus, function(j, o) {
-		 	if(o.menuid==menuid){
-				obj = o;
-			}
-		 });
+        //若一级子菜单有下级菜单才执行以下代码，若没有该判断，当一级菜单没有下级菜单时，菜单初始化会报错
+        if(n.menus!=null) {
+            $.each(n.menus, function (j, o) {
+                if (o.menuid == menuid) {
+                    obj = o;
+                }
+            });
+        }
 	});
 
 	return obj;

@@ -64,7 +64,7 @@ public class LeaveController extends BaseController {
 
 		Leave leave = new Leave();
 		leave.setUserId("666");
-		leave.setLeaveId(UUID.randomUUID().toString());
+		leave.setLeaveId(UUID.randomUUID().toString().replaceAll("-",""));
 		leave.setReason("世界那么大我要去看看");
 		leave.setStartTime(new Date());
 		leave.setEndTime(new Date());

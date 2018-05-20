@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 通用方法：insert，delete，updateEntity，queryList4Page，queryEntity -->
+<mapper namespace="com.jk.dao.AdminRoleDao">
+    <!-- 缓存 -->
+    <!--<cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />-->
+
+    <insert id="insert" parameterType="com.jk.model.AdminRoleEntity" >
+        insert into sys_role
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleName != null" >
+                role_name,
+            </if>
+            <if test="available != null" >
+                available,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleName != null" >
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null" >
+                #{available,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryList4Page" parameterType="com.jk.model.AdminRoleEntity" resultType="com.jk.model.AdminRoleEntity">
+        SELECT role.*,perm.sys_permission as role_perms FROM sys_role role left join sys_role_permission perm on role.id=perm.sys_role_id
+        where 1=1
+        <if test="available != null" >
+            and role.available=#{available,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="queryEntity" parameterType="com.jk.model.AdminRoleEntity" resultType="com.jk.model.AdminRoleEntity">
+        SELECT role.*,perm.sys_permission as role_perms FROM sys_role role left join sys_role_permission perm on role.id=perm.sys_role_id
+        where 1=1
+        <if test="id != null">
+          AND id=#{id}
+        </if>
+        <if test=" roleName != null">
+            AND role_name=#{roleName}
+        </if>
+    </select>
+    <update id="updateEntity" parameterType="com.jk.model.AdminRoleEntity" >
+        update sys_role
+        <set >
+            <if test="roleName != null" >
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null" >
+                available = #{available,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteRoleMenu" parameterType="string" >
+        delete from sys_role_menu where sys_role_id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insertRoleMenu" parameterType="java.util.List" >
+        insert into sys_role_menu (sys_role_id, menu_id)
+        <foreach collection="list" item="item" index="index" separator="union all">
+            select #{item.sysRoleId,jdbcType=DECIMAL}, #{item.menuId,jdbcType=VARCHAR} from dual
+        </foreach>
+    </insert>
+
+    <delete id="deleteRolePerm" parameterType="string" >
+        delete from sys_role_permission where sys_role_id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insertRolePerm" parameterType="string" >
+        insert into sys_role_permission (sys_role_id, sys_permission) VALUES (#{0},#{1})
+    </insert>
+</mapper>

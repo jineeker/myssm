@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.dao.AdminMenuDao">
+    <!-- 缓存 -->
+   <!-- <cache eviction="LRU" type="com.jk.redis.MybatisRedisCache" />-->
+
+    <select id="queryMenuList4Show" parameterType="com.jk.model.AdminUsersEntity" resultType="com.jk.model.AdminMenuEntity">
+        SELECT A.*,B.* FROM admin_menu A
+        LEFT JOIN sys_role_menu B ON A.menu_id=B.menu_id
+        LEFT JOIN sys_user_role C ON B.sys_role_id=C.sys_role_id
+        LEFT JOIN sys_users D ON D.id=C.sys_user_id
+        WHERE 1=1
+        <if test="username!=null">
+            and D.username = #{username}
+        </if>
+        ORDER BY A.menu_sort ASC
+    </select>
+
+    <select id="queryEntity" parameterType="com.jk.model.AdminMenuEntity" resultType="com.jk.model.AdminMenuEntity">
+        SELECT A.*,B.menu_name as menuPname FROM admin_menu A
+        LEFT JOIN admin_menu B on A.menu_pid=B.menu_id
+        WHERE 1=1
+        <if test="menuId!=null">
+            AND A.menu_id like #{menuId}
+        </if>
+        <if test="menuName!=null">
+            AND A.menu_name=#{menuName}
+        </if>
+    </select>
+
+    <update id="updateEntity" parameterType="com.jk.model.AdminMenuEntity" >
+        update admin_menu
+        <set >
+            <if test="menuName != null" >
+                menu_name = #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="menuIcon != null" >
+                menu_icon = #{menuIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="menuUrl != null" >
+                menu_url = #{menuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="menuPid != null" >
+                menu_pid = #{menuPid,jdbcType=VARCHAR},
+            </if>
+            <if test="menuSort != null" >
+                menu_sort = #{menuSort,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where menu_id = #{menuId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryList4Page" parameterType="com.jk.model.AdminMenuEntity" resultType="com.jk.model.AdminMenuEntity">
+        <!--SELECT A.*,B.menu_name as menuPname FROM admin_menu A
+        LEFT JOIN admin_menu B on A.menu_pid=B.menu_id
+        WHERE 1=1
+        <if test="menuName!=null">
+            AND A.menu_name=${menuName}
+        </if>
+        ORDER BY A.menu_sort ASC-->
+    </select>
+
+    <!--修改菜单时查询父菜单列表，此处特殊，只查询Pid=0或父菜单的Pid=0 的值-->
+    <select id="queryMenu4UpdateList" parameterType="com.jk.model.AdminMenuEntity" resultType="com.jk.model.AdminMenuEntity">
+        SELECT A.* FROM admin_menu A
+        LEFT JOIN admin_menu B on A.menu_pid=B.menu_id
+        WHERE 1=1
+        AND (B.menu_pid='0' OR A.menu_pid='0')
+        AND A.menu_url is null
+        ORDER BY A.menu_sort DESC
+    </select>
+
+    <insert id="insert" parameterType="com.jk.model.AdminMenuEntity" flushCache="true">
+        INSERT INTO admin_menu (menu_id,menu_name,menu_icon,menu_url,menu_pid,menu_sort)
+        VALUES (#{menuId},#{menuName},#{menuIcon},#{menuUrl},#{menuPid},#{menuSort})
+    </insert>
+
+    <select id="queryAllList" parameterType="com.jk.model.AdminMenuEntity" resultType="com.jk.model.AdminMenuEntity">
+        SELECT A.* FROM admin_menu A ORDER BY A.menu_sort ASC
+    </select>
+
+</mapper>

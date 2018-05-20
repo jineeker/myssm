@@ -7,7 +7,7 @@
   <!--spring 配置参数 start-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring-mvc.xml,classpath:spring-context-activiti.xml,classpath:mybatis.xml,classpath:spring-mybatis.xml</param-value>
+    <param-value>classpath:spring-mvc.xml,classpath:spring-context-activiti.xml,classpath:spring-context-mybatis.xml,classpath:spring-context-shiro.xml</param-value>
   </context-param>
   <!--ContextLoaderListener监听器的作用就是启动Web容器时，自动装配ApplicationContext的配置信息-->
   <listener>

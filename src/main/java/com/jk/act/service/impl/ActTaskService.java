@@ -1,10 +1,11 @@
 /**
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.jk.act.service;
+package com.jk.act.service.impl;
 
 import com.github.pagehelper.Page;
 import com.jk.act.entity.BaseVO;
+import com.jk.act.service.IActTaskService;
 import com.jk.base.BaseService;
 import com.jk.model.User;
 import org.activiti.engine.RuntimeService;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class ActTaskService extends BaseService {
+public class ActTaskService extends BaseService implements IActTaskService {
 
 	@Autowired
 	private RuntimeService runtimeService;

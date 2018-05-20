@@ -1,11 +1,12 @@
 /**
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.jk.act.service;
+package com.jk.act.service.impl;
 
 import com.github.pagehelper.Page;
 import com.jk.act.entity.ProcessDefinitionEntity;
 import com.jk.act.entity.ProcessInstanceEntity;
+import com.jk.act.service.IActProcessService;
 import com.jk.base.BaseService;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
@@ -36,7 +37,7 @@ import java.util.zip.ZipInputStream;
  */
 @Service
 @Transactional(readOnly = true)
-public class ActProcessService extends BaseService {
+public class ActProcessService extends BaseService implements IActProcessService {
 
 	@Autowired
 	private RepositoryService repositoryService;

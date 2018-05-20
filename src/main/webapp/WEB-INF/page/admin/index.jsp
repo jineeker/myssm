@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -11,83 +12,82 @@
 
     <script type="text/javascript">
 
-        var _menus = {
-            "menus": [{
-                "menuid": "1",
-                "icon": "icon-sys",
-                "menuname": "控件使用",
-                "menus": [{
-                    "menuid": "11",
-                    "menuname": "古月流苏",
-                    "icon": "icon-add",
-                    "url": "javascript:void(0);",
-                    "child": [{
-                        "menuid": "140",
-                        "menuname": "用户查询",
-                        "icon": "icon-role",
-                        "url": "userView.do"
-                    }]
-                },
-                {
-                    "menuid": "12",
-                    "menuname": "流程引擎",
-                    "icon": "icon-add",
-                    "url": "javascript:void(0);",
-                    "child": [{
-                        "menuid": "121",
-                        "menuname": "部署流程",
-                        "icon": "icon-role",
-                        "url": "/k/act/process/deployView"
-                    },
-                    {
-                        "menuid": "121",
-                        "menuname": "流程管理",
-                        "icon": "icon-role",
-                        "url": "/k/act/process/processListView"
-                    },
+//        var _menus = {
+//            "menus": [{
+//                "menuid": "1",
+//                "icon": "icon-sys",
+//                "menuname": "控件使用",
+//                "menus": [{
+//                    "menuid": "11",
+//                    "menuname": "古月流苏",
+//                    "icon": "icon-add",
+//                    "child": [{
+//                        "menuid": "140",
+//                        "menuname": "用户查询",
+//                        "icon": "icon-role",
+//                        "url": "userView.do"
+//                    }]
+//                },
+//                {
+//                    "menuid": "12",
+//                    "menuname": "流程引擎",
+//                    "icon": "icon-add",
+//                    "url": "javascript:void(0);",
+//                    "child": [{
+//                        "menuid": "121",
+//                        "menuname": "部署流程",
+//                        "icon": "icon-role",
+//                        "url": "/k/act/process/deployView"
+//                    },
 //                    {
 //                        "menuid": "121",
-//                        "menuname": "运行中的流程",
+//                        "menuname": "流程管理",
 //                        "icon": "icon-role",
-//                        "url": "/k/act/process/runninglistView"
+//                        "url": "/k/act/process/processListView"
 //                    },
-                    {
-                        "menuid": "121",
-                        "menuname": "请假信息",
-                        "icon": "icon-role",
-                        "url": "/k/leave/leaveListView"
-                    },
-                    {
-                        "menuid": "121",
-                        "menuname": "任务管理",
-                        "icon": "icon-role",
-                        "url": "/k/act/task/listView"
-                    }]
-                }]
-            },
-            {
-                "menuid": "8",
-                "icon": "icon-sys",
-                "menuname": "员工管理",
-                "menus": [{
-                    "menuid": "21",
-                    "menuname": "员工列表",
-                    "icon": "icon-nav",
-                    "url": "demo.html"
-                }]
-            },
-            {
-                "menuid": "56",
-                "icon": "icon-sys",
-                "menuname": "部门管理",
-                "menus": [{
-                    "menuid": "31",
-                    "menuname": "添加部门",
-                    "icon": "icon-nav",
-                    "url": "demo1.html"
-                }]
-            }]
-        };
+////                    {
+////                        "menuid": "121",
+////                        "menuname": "运行中的流程",
+////                        "icon": "icon-role",
+////                        "url": "/k/act/process/runninglistView"
+////                    },
+//                    {
+//                        "menuid": "121",
+//                        "menuname": "请假信息",
+//                        "icon": "icon-role",
+//                        "url": "/k/leave/leaveListView"
+//                    },
+//                    {
+//                        "menuid": "121",
+//                        "menuname": "任务管理",
+//                        "icon": "icon-role",
+//                        "url": "/k/act/task/listView"
+//                    }]
+//                }]
+//            },
+//            {
+//                "menuid": "8",
+//                "icon": "icon-sys",
+//                "menuname": "员工管理",
+//                "menus": [{
+//                    "menuid": "21",
+//                    "menuname": "员工列表",
+//                    "icon": "icon-nav",
+//                    "url": "demo.html"
+//                }]
+//            },
+//            {
+//                "menuid": "56",
+//                "icon": "icon-sys",
+//                "menuname": "部门管理",
+//                "menus": [{
+//                    "menuid": "31",
+//                    "menuname": "添加部门",
+//                    "icon": "icon-nav",
+//                    "url": "demo1.html"
+//                }]
+//            }]
+//        };
 
         //设置密码窗口
         function openPwd() {
@@ -154,7 +154,7 @@
                 $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function(r) {
 
                     if (r) {
-                        location.href = '/ajax/loginout.ashx';
+                        location.href = '/k/index/logout.do';
                     }
                 });
             })
@@ -173,16 +173,15 @@
             <img src="${ctxPath}/static/common/jquery-easyui-1.3.6/images/loading.gif" align="absmiddle" /> 正在加载中,请稍候...</div>
     </div>
 
-    <%--<div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
-            background: url(images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
+    <div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
+            background: url(${ctxPath}/static/common/jquery-easyui-1.3.6/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-        <span style="float:right; padding-right:20px;" class="head">欢迎 疯狂秀才 <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
-        <span style="padding-left:10px; font-size: 16px; "><img src="images/blocks.gif" width="20" height="20" align="absmiddle" /> jQuery.EasyUI- 1.2.6 应用实例</span>
-    </div>--%>
+        <span style="float:right; padding-right:20px;" class="head">欢迎 <shiro:principal/> <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
+        <span style="padding-left:10px; font-size: 16px; "><img src="${ctxPath}/static/common/jquery-easyui-1.3.6/images/blocks.gif" width="20" height="20" align="absmiddle" /> jQuery.EasyUI- 1.2.6 应用实例</span>
+    </div>
     <div region="west" split="true"  title="导航菜单" style="width:180px;" id="west">
         <div id="nav">
             <!--  导航内容 -->
-
         </div>
 
     </div>

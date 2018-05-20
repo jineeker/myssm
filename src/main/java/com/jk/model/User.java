@@ -1,11 +1,9 @@
 package com.jk.model;
 
-import java.io.Serializable;
-
 /**
  * Created by hukai on 2016/7/24.
  */
-public class User implements Serializable{
+public class User extends BaseEntity{
     private int usersId;// 管理员ID
     private String userName;// 管理员名字
     private String userAccount;// 管理员登录账号
