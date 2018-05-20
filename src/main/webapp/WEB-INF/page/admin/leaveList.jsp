@@ -9,9 +9,9 @@
 <body>
 <!--工具栏-->
 <div id="processTb">
-	<a href="#" onclick="toActive();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">添加</a>
+	<a href="#" onclick="toAddLeaveBill();" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">添加请假单</a>
 	&nbsp;
-	<a href="#" onclick="toSuspend();" class="easyui-linkbutton" data-options="iconCls:'icon-no',plain:true">审批</a>
+	<a href="#" onclick="toSuspend();" class="easyui-linkbutton" data-options="iconCls:'icon-no',plain:true">审批请假单</a>
 </div>
 
 
@@ -23,7 +23,7 @@
 	var selectRow;
 	$(function(){
 		$("#leaveTable").datagrid({
-			url:'leaveList',
+			url:'leave/leaveList',
 			method:'post',
 			loadMsg:'正在努力加载！',
 			toolbar:'#processTb',

@@ -1,7 +1,5 @@
 package com.jk.model;
 
-import com.jk.act.entity.BaseVO;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,14 +9,12 @@ import java.util.Date;
  * @Email 614811431@qq.com
  * @Date 2017/7/30 15:50
  */
-public class Leave extends BaseVO implements Serializable{
+public class Leave implements Serializable{
 
     private String leaveId;//主键
     private String userId;//申请人id
     private String reason; 	// 请假原因
     private String processInstanceId; // 流程实例编号
-    private Date startTime;	// 请假开始日期
-    private Date endTime;	// 请假结束日期
     private Integer leaveDays;//请假天数
     private Date createDate;//创建时间
 
@@ -91,22 +87,6 @@ public class Leave extends BaseVO implements Serializable{
 
     public void setProcessInstanceId(String processInstanceId) {
         this.processInstanceId = processInstanceId;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
     }
 
     public Integer getLeaveDays() {

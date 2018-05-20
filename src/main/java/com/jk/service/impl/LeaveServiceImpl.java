@@ -38,11 +38,6 @@ public class LeaveServiceImpl implements ILeaveService {
                 String businessKey = leave.getLeaveId().toString();
 
                 Map<String, Object> variables = new HashMap<String, Object>();
-                leave.setBusinessType("leave");
-                leave.setBusinessKey(businessKey);
-                leave.setUser_name("XXX");
-                leave.setTitle("XXX的请假");
-
                 variables.put("entity",leave);
 
                 ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("LeaveBill", businessKey, variables);
@@ -77,7 +72,6 @@ public class LeaveServiceImpl implements ILeaveService {
                 String comment = (String) taskService.getVariable(task.getId(), "comment");
                 entity.setTaskDesc(comment);
             }
-            System.out.println(tasks.size());
         }
         return list;
     }
